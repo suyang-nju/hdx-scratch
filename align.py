@@ -2,7 +2,7 @@ from Bio.Alphabet import IUPAC
 from Bio.SubsMat.MatrixInfo import blosum100
 from Bio import pairwise2
 
-blosum100X0 = {k: 0 if 'X' in k else blosum100[k] for k in blosum100}
+blosum100X0 = {k: 0 if 'X' in k else v for k, v in blosum100.items()}
 
 def print_matrix(matrix):
     letters = list(IUPAC.extended_protein.letters)
@@ -97,8 +97,10 @@ def align(seq1, seq2):
         assert seq1[i] == seq1a[mapping['map_1_1a'][i]]
         assert seq1[i] == seq2[mapping['map_1_2_left'][i]]
     '''
+    assert type(seq1) == type(seq2)
+    gap_char = '-' if isinstance(seq1, str) else [ '-' ]
     alignment = pairwise2.align.localds(seq1, seq2, blosum100X0, 
-        -10, -0.5, gap_char=['-'], one_alignment_only=True)
+        -10, -0.5, gap_char=gap_char, one_alignment_only=True)
     seq1a, seq2a = alignment[0][0:2]
     mapping = {}
     map1 = _map_same_sequence(seq1, seq1a)
