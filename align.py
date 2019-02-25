@@ -23,7 +23,7 @@ def print_matrix(matrix):
     lines.append(header)
     print('\n'.join(lines))
 
-def _map_same_sequence(seq1, seq2):
+def _map_same_sequence(seq1, seq1a):
     '''
     map the indices of the same sequence before/after alignment
     '''
@@ -31,8 +31,8 @@ def _map_same_sequence(seq1, seq2):
     m = [ None ] * len(seq1)
     for i in range(len(seq1)):
         if seq1[i] == '-': continue
-        while seq2[j] == '-': j += 1
-        assert seq1[i] == seq2[j], 'seq1[{}]={} seq2[{}]={}'.format(i, seq1[i], j, seq2[j])
+        while seq1a[j] == '-': j += 1
+        assert seq1[i] == seq1a[j], 'seq1[{}]={} seq1a[{}]={}'.format(i, seq1[i], j, seq1a[j])
         m[i] = j
         j += 1
     return m
@@ -45,7 +45,7 @@ def _map_alignment(seq2a):
     non- - or X residue to the left and right in seq2a.
     '''
     m_left = [ 0 ] * len(seq2a)
-    m_right = [ len(seq2a) ] * len(seq2a)
+    m_right = [ len(seq2a) - 1 ] * len(seq2a)
     for i in range(len(seq2a)):
         if seq2a[i] not in '-X':
             m_left[i] = i
